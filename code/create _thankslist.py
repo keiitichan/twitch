@@ -1,19 +1,19 @@
 import re
 import pandas as pd
 
-"""
-説明
+"""md
+# 説明
   StreamElementsに存在する「ビッツ、フォロー、レイド、サブスク」をしてくれた人に
   thanksメッセージを送る前の、メンバー一覧を作成するプログラムです。
   同じディレクトリに存在するテキストファイルの内容を読み取り、必要な情報のみを抽出します。
   別ファイルに書き込むなどの処理はしていません。
   とりあえず、形として即席でコンソール結果からコピペして一覧取得できるようにしただけです
-想定するテキスト
-  フォロー：* followed your channel!
-  サブスク：has resubscribed (*) for * months (* month streak)
-  　　　　　has subscribed to you (Tier *)
-  レイド　：* raided your channel with * viewers!
-  ビッツ　：* cheered * bits!
+# 想定するテキスト
+  - フォロー：* followed your channel!
+  - サブスク：has resubscribed (*) for * months (* month streak)
+    　　　　　has subscribed to you (Tier *)
+  - レイド　：* raided your channel with * viewers!
+  - ビッツ　：* cheered * bits!
 """
 
 # 使う正規表現
