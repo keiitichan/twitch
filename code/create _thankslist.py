@@ -16,14 +16,16 @@ import pandas as pd
   - ビッツ　：* cheered * bits!
 """
 
-# 使う正規表現
+filename = "./test.txt"
+
 r_del_str = r"(^\d*d$|^\d*h$)"
 r_follow = r" followed.*"
 r_cheered = r" cheered.*"
-r_subscribed = r" has subscribed.*"
+r_subscribed = r"has [resubscribed|subscribed].*"
 r_raided = r" raided.*"
+# pat = re.compile(reg)
 
-# 使う配列
+# 各配列を作成
 l_all = []
 l_follow = []
 l_cheered = []
@@ -42,7 +44,20 @@ def find_follow(l_str):
             l_follow.append(s_name)
     l_follow.sort(key = lambda s: len(s))
 
-
+def cheer_sum(s_cheers):
+    """
+    重複してcheerしてくれた方のビッツの数を合算させる
+    """
+    if bool(s_cheers):
+        """
+        cheerした人がいない時には実行されないようにしました。
+        """
+        colum = ["name", "value"]
+        df = pd.DataFrame(data=s_cheers, columns=colum)
+        d_sum = df.groupby('name').sum().to_dict()["value"]
+        for n in list(d_sum.keys()):
+            s = n + "(" + str(d_sum[n]) + ")"
+            l_cheered_sum.append(s)
 
 
 def find_cheered(l_str):
@@ -55,18 +70,37 @@ def find_cheered(l_str):
             value = int(re.search(r'cheered\s(\d*)\sbits!', s).groups(0)[0])
             l_cheered.append([name,value])
     l_cheered.sort()
+    print(bool(l_cheered))
     cheer_sum(l_cheered)
 
 def find_subscribed(l_str):
     # print("==== subscribed ==============")
     for s in l_str:
+        # print(s)
+
         pattern = re.compile(r_subscribed)
         s_subscribed = pattern.search(s)
         if bool(s_subscribed):
             # print('[DEBUG]: ' + s)
+            reg = '(?<=\().+?(?=\))'
+            print(s)
+            sub_type = re.findall(reg, s)[0]
             name = re.sub(r_subscribed, "", s)
-            l_subscribed.append(name)
-    l_subscribed.sort(key = lambda s: len(s))
+            sub_type = sub_type.replace(" ","")
+            # elif len(ret) == 2: 
+            if "for" in s:
+                print(1)
+                print('===================-')
+                sub_str = re.search(r'for \d+ months',s).group()
+                sub_total = re.findall(r'\s(\d+)\s', sub_str)[0]
+                print('[DEBUG]: ' + name)
+                l_subscribed.append(name + "(" + sub_type + "/" + sub_total + "ヶ月)")
+            elif not("for" in s):
+                print(2)
+                l_subscribed.append(name + "(" + sub_type + ")")
+            else:
+                print("[ERROR]: (" + name + ") サブスクライブの文字列で想定外のエラーが出力されました。(monthじゃない？)")
+
 
 
 def find_raided(l_str):
@@ -79,23 +113,9 @@ def find_raided(l_str):
             l_raided.append(name)
     l_raided.sort(key = lambda s: len(s))
 
-    
-def cheer_sum(s_cheers):
-    """
-    重複してcheerしてくれた方のビッツの数を合算させる
-    """
-    colum = ["name", "value"]
-    df = pd.DataFrame(data=s_cheers, columns=colum)
-    d_sum = df.groupby('name').sum().to_dict()["value"]
-    for n in list(d_sum.keys()):
-        s = n + "(" + str(d_sum[n]) + ")"
-        l_cheered_sum.append(s)
-    
+
 
 def all_print(l_items):
-    """
-    収納した情報をここにて欲しい形に修正して出力する
-    """
     l_title = [ "フォロー", "ビッツ", "サブスク(ギフト)", "レイド"]
     for i, l_resultl in enumerate(l_items):
         print("# " + l_title[i])
@@ -104,7 +124,11 @@ def all_print(l_items):
         print("")
 
 
-with open("./test.txt") as f:
+
+
+
+# with open("./test.txt") as f:
+with open(filename) as f:
     # print('\n'.join(map(str, f)))
     count = 1
     for s in f:
@@ -119,6 +143,7 @@ with open("./test.txt") as f:
             continue
         l_all.append(s)
         count += 1
+        
 # find_*系の関数で必要な情報を取得する
 find_follow(l_all)
 find_cheered(l_all)
