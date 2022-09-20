@@ -1,5 +1,15 @@
 import re
 import pandas as pd
+import collections
+import datetime
+
+# 今日の日付のファイルのみに反応して動く様に設定しています。
+d_today = datetime.date.today()
+date_yyyymmdd = d_today.strftime('%Y%m%d')
+# 現在のファイル名の想定は「twitch_20220922.txt.」など
+# 整形する対象ファイル名を" "内に記載します
+filename = "./twitch_" + date_yyyymmdd + ".txt"
+print(filename)
 
 """md
 # 説明
@@ -11,16 +21,16 @@ import pandas as pd
 # 想定するテキスト
   - フォロー：* followed your channel!
   - サブスク：has resubscribed (*) for * months (* month streak)
-    　　　　　has subscribed to you (Tier *)
+            has subscribed to you (Tier *)
   - レイド　：* raided your channel with * viewers!
   - ビッツ　：* cheered * bits!
 """
 
-filename = "./test.txt"
 
 r_del_str = r"(^\d*d$|^\d*h$)"
 r_follow = r" followed.*"
 r_cheered = r" cheered.*"
+r_gifted = r" gifted.*!$"
 r_subscribed = r"has [resubscribed|subscribed].*"
 r_raided = r" raided.*"
 # pat = re.compile(reg)
@@ -30,6 +40,7 @@ l_all = []
 l_follow = []
 l_cheered = []
 l_cheered_sum = []
+l_gifted = []
 l_subscribed = []
 l_raided = []
 
@@ -72,6 +83,27 @@ def find_cheered(l_str):
     l_cheered.sort()
     print(bool(l_cheered))
     cheer_sum(l_cheered)
+    
+
+def find_gifted(l_str):
+    """
+    ギフトしてくれた人の名前だけを取得して配列に入れ、
+    重複した数（ギフトしてくれた数）を名前のよこに括弧書きで記載する
+    """
+    # print("==== gifted ==============")
+    gift_names = []
+            
+    for s in l_str:
+        pattern = re.compile(r_gifted)
+        s_gifted = pattern.search(s)
+        if bool(s_gifted):
+            reg = '(.*) gifted'
+            gifted_name = re.findall(reg, s)[0]
+            gift_names.append(gifted_name)
+    gift_counter = collections.Counter(gift_names).items()
+    for n, c in gift_counter:
+        l_gifted.append(n + "(" + str(c) + ")")
+
 
 def find_subscribed(l_str):
     # print("==== subscribed ==============")
@@ -83,20 +115,15 @@ def find_subscribed(l_str):
         if bool(s_subscribed):
             # print('[DEBUG]: ' + s)
             reg = '(?<=\().+?(?=\))'
-            print(s)
             sub_type = re.findall(reg, s)[0]
             name = re.sub(r_subscribed, "", s)
             sub_type = sub_type.replace(" ","")
             # elif len(ret) == 2: 
             if "for" in s:
-                print(1)
-                print('===================-')
                 sub_str = re.search(r'for \d+ months',s).group()
                 sub_total = re.findall(r'\s(\d+)\s', sub_str)[0]
-                print('[DEBUG]: ' + name)
                 l_subscribed.append(name + "(" + sub_type + "/" + sub_total + "ヶ月)")
             elif not("for" in s):
-                print(2)
                 l_subscribed.append(name + "(" + sub_type + ")")
             else:
                 print("[ERROR]: (" + name + ") サブスクライブの文字列で想定外のエラーが出力されました。(monthじゃない？)")
@@ -116,15 +143,19 @@ def find_raided(l_str):
 
 
 def all_print(l_items):
-    l_title = [ "フォロー", "ビッツ", "サブスク(ギフト)", "レイド"]
+    """
+    三項演算子のelseで「continue」を使用できないため(ent="")で代用
+    サブスクギフトとギフトの間は親子関係(# ,## )のようにしたいため、改行なしで表示する
+    """
+    l_title = [ "フォロー", "ビッツ", "サブスク(ギフト)", "ギフト", "レイド"]
     for i, l_resultl in enumerate(l_items):
-        print("# " + l_title[i])
+        if l_title[i] == "ギフト":
+            print("## " + l_title[i])
+        else:
+            print("# " + l_title[i])
         for s in l_resultl:
             print("- " + str(s))
-        print("")
-
-
-
+        print("") if not(l_title[i] == "サブスク(ギフト)") else print("",end="") 
 
 
 # with open("./test.txt") as f:
@@ -148,8 +179,8 @@ with open(filename) as f:
 find_follow(l_all)
 find_cheered(l_all)
 find_subscribed(l_all)
+find_gifted(l_all)
 find_raided(l_all)
 print("==== Print Start==================")
-l_result = [l_follow, l_cheered_sum, l_subscribed, l_raided]
+l_result = [l_follow, l_cheered_sum, l_subscribed, l_gifted, l_raided]
 all_print(l_result)
-
