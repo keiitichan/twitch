@@ -147,15 +147,15 @@ def all_print(l_items):
     三項演算子のelseで「continue」を使用できないため(ent="")で代用
     サブスクギフトとギフトの間は親子関係(# ,## )のようにしたいため、改行なしで表示する
     """
-    l_title = [ "フォロー", "ビッツ", "サブスク(ギフト)", "ギフト", "レイド"]
+    l_title = [ "フォロー", "ビッツ", "サブスク", "サブスクギフト", "レイド"]
     for i, l_resultl in enumerate(l_items):
-        if l_title[i] == "ギフト":
+        if l_title[i] == "サブスクギフト":
             print("## " + l_title[i])
         else:
             print("# " + l_title[i])
         for s in l_resultl:
             print("- " + str(s))
-        print("") if not(l_title[i] == "サブスク(ギフト)") else print("",end="") 
+        print("") if not(l_title[i] == "サブスク") else print("",end="") 
 
 
 # with open("./test.txt") as f:
