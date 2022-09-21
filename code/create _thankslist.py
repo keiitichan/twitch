@@ -129,7 +129,6 @@ def find_subscribed(l_str):
                 print("[ERROR]: (" + name + ") サブスクライブの文字列で想定外のエラーが出力されました。(monthじゃない？)")
 
 
-
 def find_raided(l_str):
     # print("==== raided ==============")
     for s in l_str:
@@ -179,6 +178,7 @@ with open(filename) as f:
 find_follow(l_all)
 find_cheered(l_all)
 find_subscribed(l_all)
+l_subscribed = list(set(l_subscribed)) # 応急処置: 重複するサブスクを削除
 find_gifted(l_all)
 find_raided(l_all)
 print("==== Print Start==================")
