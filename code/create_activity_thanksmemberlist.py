@@ -11,7 +11,7 @@ date_yyyymmdd = d_today.strftime('%Y%m%d')
 filename = "./twitch_" + date_yyyymmdd + ".txt"
 print(filename)
 
-"""md
+"""
 # 説明
   StreamElementsに存在する「ビッツ、フォロー、レイド、サブスク」をしてくれた人に
   thanksメッセージを送る前の、メンバー一覧を作成するプログラムです。
@@ -44,6 +44,7 @@ l_gifted = []
 l_subscribed = []
 l_raided = []
 
+
 def find_follow(l_str):
     # print("==== follow ==============")
     for s in l_str:
@@ -53,7 +54,8 @@ def find_follow(l_str):
             # print(s)
             s_name = re.sub(r_follow, "", s)
             l_follow.append(s_name)
-    l_follow.sort(key = lambda s: len(s))
+    l_follow.sort(key=lambda s: len(s))
+
 
 def cheer_sum(s_cheers):
     """
@@ -79,11 +81,11 @@ def find_cheered(l_str):
         if bool(s_cheered):
             name = re.sub(r_cheered, "", s)
             value = int(re.search(r'cheered\s(\d*)\sbits!', s).groups(0)[0])
-            l_cheered.append([name,value])
+            l_cheered.append([name, value])
     l_cheered.sort()
     print(bool(l_cheered))
     cheer_sum(l_cheered)
-    
+
 
 def find_gifted(l_str):
     """
@@ -92,7 +94,7 @@ def find_gifted(l_str):
     """
     # print("==== gifted ==============")
     gift_names = []
-            
+
     for s in l_str:
         pattern = re.compile(r_gifted)
         s_gifted = pattern.search(s)
@@ -114,19 +116,21 @@ def find_subscribed(l_str):
         s_subscribed = pattern.search(s)
         if bool(s_subscribed):
             # print('[DEBUG]: ' + s)
-            reg = '(?<=\().+?(?=\))'
+            reg = r'(?<=\().+?(?=\))'
             sub_type = re.findall(reg, s)[0]
             name = re.sub(r_subscribed, "", s)
-            sub_type = sub_type.replace(" ","")
-            # elif len(ret) == 2: 
+            sub_type = sub_type.replace(" ", "")
+            # elif len(ret) == 2:
             if "for" in s:
-                sub_str = re.search(r'for \d+ months',s).group()
+                sub_str = re.search(r'for \d+ months', s).group()
                 sub_total = re.findall(r'\s(\d+)\s', sub_str)[0]
-                l_subscribed.append(name + "(" + sub_type + "/" + sub_total + "ヶ月)")
-            elif not("for" in s):
+                l_subscribed.append(
+                    name + "(" + sub_type + "/" + sub_total + "ヶ月)")
+            elif not ("for" in s):
                 l_subscribed.append(name + "(" + sub_type + ")")
             else:
-                print("[ERROR]: (" + name + ") サブスクライブの文字列で想定外のエラーが出力されました。(monthじゃない？)")
+                print("[ERROR]: (" + name +
+                      ") サブスクライブの文字列で想定外のエラーが出力されました。(monthじゃない？)")
 
 
 def find_raided(l_str):
@@ -137,8 +141,7 @@ def find_raided(l_str):
         if bool(s_raided):
             name = re.sub(r_raided, "", s)
             l_raided.append(name)
-    l_raided.sort(key = lambda s: len(s))
-
+    l_raided.sort(key=lambda s: len(s))
 
 
 def all_print(l_items):
@@ -146,7 +149,7 @@ def all_print(l_items):
     三項演算子のelseで「continue」を使用できないため(ent="")で代用
     サブスクギフトとギフトの間は親子関係(# ,## )のようにしたいため、改行なしで表示する
     """
-    l_title = [ "フォロー", "ビッツ", "サブスク", "サブスクギフト", "レイド"]
+    l_title = ["フォロー", "ビッツ", "サブスク", "サブスクギフト", "レイド"]
     for i, l_resultl in enumerate(l_items):
         if l_title[i] == "サブスクギフト":
             print("## " + l_title[i])
@@ -154,7 +157,7 @@ def all_print(l_items):
             print("# " + l_title[i])
         for s in l_resultl:
             print("- " + str(s))
-        print("") if not(l_title[i] == "サブスク") else print("",end="") 
+        print("") if not (l_title[i] == "サブスク") else print("", end="")
 
 
 # with open("./test.txt") as f:
@@ -168,17 +171,17 @@ with open(filename) as f:
         # ３種類の改行を無くす
         s = re.sub(r'(\r\n|\r|\n)', '', s)
         s = re.sub(r_del_str, '', s)
-        if not(bool(s)):
+        if not (bool(s)):
             # Falseの場合次へ
             continue
         l_all.append(s)
         count += 1
-        
+
 # find_*系の関数で必要な情報を取得する
 find_follow(l_all)
 find_cheered(l_all)
 find_subscribed(l_all)
-l_subscribed = list(set(l_subscribed)) # 応急処置: 重複するサブスクを削除
+l_subscribed = list(set(l_subscribed))  # 応急処置: 重複するサブスクを削除
 find_gifted(l_all)
 find_raided(l_all)
 print("==== Print Start==================")
