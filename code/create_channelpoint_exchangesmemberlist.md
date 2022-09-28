@@ -15,13 +15,16 @@
 ![image](https://user-images.githubusercontent.com/113818239/192721991-798e9213-e672-4f88-a706-0ba8950adfce.png)
 
 ### 2. 特定のリクエストを選択し、集計したい範囲のデータを選択（ドラッグ）しコピーする
-![image](https://user-images.githubusercontent.com/113818239/192722703-d48304c9-aff5-4876-82a6-b379363e9878.png)
+<img src="https://user-images.githubusercontent.com/113818239/192722703-d48304c9-aff5-4876-82a6-b379363e9878.png" width=800>
+
 
 ### 3. メモ帳（拡張子：.txt）などエディターでコピーした文字列をペーストして「」というファイル名で保存する（プログラムと同じフォルダに配置すること）
-![image](https://user-images.githubusercontent.com/113818239/192723471-82f2968c-f308-48d6-92b3-02e4d759ac87.png)
+<img src="https://user-images.githubusercontent.com/113818239/192723471-82f2968c-f308-48d6-92b3-02e4d759ac87.png" width=800>
+
 
 ### 4. プログラムを実行する
-![image](https://user-images.githubusercontent.com/113818239/192724068-dd1c491f-f30d-4f5d-9290-955acd29192d.png)
+<img src="https://user-images.githubusercontent.com/113818239/192724068-dd1c491f-f30d-4f5d-9290-955acd29192d.png" width=800>
+
 
 ### 5. 「====」と「====」内の必要な情報をコピーし任意の用途で使用する（例：感謝カードに記名）
   - 左側が「アカウント名」で右側が「交換した回数」を表す 
