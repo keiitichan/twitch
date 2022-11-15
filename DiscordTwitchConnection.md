@@ -17,7 +17,7 @@
 ___
 ### スマホの場合
 1. 画面右下のユーザーアイコンを選択すれば、ユーザー設定画面をタッチ
-<img src="https://user-images.githubusercontent.com/113818239/201999968-c71a9f92-8e83-451f-8760-89afa8c413a8.png" width=800>
+<img src="https://user-images.githubusercontent.com/113818239/202000293-ab965f2d-18d3-4af6-bcaf-1f7072d628e1.png" width=800>
 1. スマホの場合は [接続] メニューを選択したあと、画面右上の [追加] から Twitch アカウントに接続
 <img src="https://user-images.githubusercontent.com/113818239/201999284-ac74b9cf-765a-4aa0-9f3a-9ac15842004e.png" width=800>
 
