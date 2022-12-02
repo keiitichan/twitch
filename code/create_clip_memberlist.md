@@ -25,7 +25,7 @@
 
 
 ### 4. プログラムを実行する
-<img src="https://user-images.githubusercontent.com/113818239/192724068-dd1c491f-f30d-4f5d-9290-955acd29192d.png" width=800>
+<img src="" width=800>
 
 
 ### 5. 「====」と「====」内の必要な情報を任意の用途で使用する（例：感謝カードに記名）
