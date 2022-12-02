@@ -60,8 +60,13 @@ def delete_batchname(l_items):
 
 
 def counter_exchanges(l_members):
+    """
+    名前とその人が交換した回数の辞書を文字列に変換し、配列に追加する
+    辞書の時点で回数を多い順にソートする処理を行う
+    """
     members_counter = collections.Counter(l_members).items()
-    for n, c in members_counter:
+    cp_rank_menmers = sorted(members_counter, key=lambda x: x[1], reverse=True)
+    for n, c in cp_rank_menmers:
         l_result.append(n + "(" + str(c) + ")")
 
 
@@ -96,9 +101,10 @@ if __name__ == "__main__":
     l_exclusiondata = []
     l_members = []
     l_result = []
-    r_del_str = r"(^\d+ 時間前|^\d+ 日前)"
+    r_del_str = r"(^\d+ 時間前|^\d+ 日前|^..?日|^.月)"
+    # 必要に応じてバッチの名前を以下の配列に追加してください.
     l_r_del_str = [r"モデレーター",
-                   r"(\d+-Month Subscriber|\d+ヶ月のサブスクライバー|サブスクライバー)",
+                   r"(\d+-Month Subscriber|\d+ヵ月サブスクライバー)",
                    ",",
                    r"cheer \d*",
                    r"ビッツリーダー\d?",
@@ -108,5 +114,7 @@ if __name__ == "__main__":
                    r" \(.*\)",
                    "Prime Gaming",
                    "ストリーマー",
+                   "サブスクギフター",
+                   "サブスクライバー"
                    ]
     main()
